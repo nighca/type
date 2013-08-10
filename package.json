@@ -2,11 +2,12 @@
     "name": "type",
     "title": "type",
     "description": "type check with javascript",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "",
     "author": {
         "name": "nighca",
-        "url": "http://nighca.me/"
+        "url": "http://nighca.me/",
+        "email": "nighca@live.cn"
     },
     "repository": {
         "type": "git",
