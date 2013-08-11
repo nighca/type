@@ -43,6 +43,88 @@ Type.define = function(name, check, override){
     }
 };
 
+Type.isType = function(t){
+    return t && t.constructor === Type;
+}
+
+Type.mix = function(name){
+    var types, type;
+    if(!Type.isStr(name)){
+        types = Array.prototype.slice.call(arguments, 0);
+        name = null;
+    }else{
+        types = Array.prototype.slice.call(arguments, 1);
+    }
+
+    if(types.length < 2){
+        throw new Error('Params error');
+    }
+    var i, l;
+    for (i = 0, l = types.length; i < l; i++) {
+        if(!Type.isType(types[i])){
+            throw new TypeError('Param not a type');
+        }
+    }
+
+    if(!name){
+        name = 'MIX_OF_' + types[0].typeName;
+        for (i = 1, l = types.length; i < l; i++) {
+            name += '_' + types[i].typeName;
+        }
+        name += '@' + Date.now();
+    }
+
+    var checker = function(obj){
+        for (var i = 0, l = types.length; i < l; i++) {
+            if(!types[i].check(obj)){
+                return false;
+            }
+        }
+        return true;
+    };
+
+    return Type.define(name, checker);
+};
+
+Type.any = function(name){
+    var types, type;
+    if(!Type.isStr(name)){
+        types = Array.prototype.slice.call(arguments, 0);
+        name = null;
+    }else{
+        types = Array.prototype.slice.call(arguments, 1);
+    }
+
+    if(types.length < 2){
+        throw new Error('Params error');
+    }
+    var i, l;
+    for (i = 0, l = types.length; i < l; i++) {
+        if(!Type.isType(types[i])){
+            throw new TypeError('Param not a type');
+        }
+    }
+
+    if(!name){
+        name = 'ANY_OF_' + types[0].typeName;
+        for (i = 1, l = types.length; i < l; i++) {
+            name += '_' + types[i].typeName;
+        }
+        name += '@' + Date.now();
+    }
+
+    var checker = function(obj){
+        for (var i = 0, l = types.length; i < l; i++) {
+            if(types[i].check(obj)){
+                return true;
+            }
+        }
+        return false;
+    };
+
+    return Type.define(name, checker);
+};
+
 Type.destroy = function(name){
     if(!Type.isStr(name)){
         throw new TypeError('Param error');
