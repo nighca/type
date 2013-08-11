@@ -28,6 +28,22 @@ describe('Type', function(){
         });
     }
 
+
+    try{
+        var isPersonDefined = Type.isDefined('PERSON');
+        var isPersonsDefined = Type.isDefined('PERSONS');
+        throw 'ok';
+    }catch(e){
+        describe('judge if PERSON/PERSONS defined', function(){
+            it('works well & return true/false', function (done) {
+                e.should.equal('ok');
+                isPersonDefined.should.equal(true);
+                isPersonsDefined.should.equal(false);
+                done();
+            });
+        });
+    }
+
     var ps = {
         p1: new Person('p1'),
         p2: new Person('p2'),
@@ -92,12 +108,25 @@ describe('Type', function(){
 
     try{
         var StrOrNum = Type.any(Str, Num);
-        var StrOrNum2 = Type.any('StrOrNum2', Str, Num);
+        var StrOrNum2 = Type.any('STRORNUM', Str, Num);
         throw 'ok';
     }catch(e){
         describe('any: Str or Num => StrOrNum', function(){
             it('throw ok', function (done) {
                 e.should.equal('ok');
+                done();
+            });
+        });
+    }
+
+    try{
+        var isStrOrNumDefined = Type.isDefined('STRORNUM');
+        throw 'ok';
+    }catch(e){
+        describe('judge if STRORNUM defined', function(){
+            it('works well & return true', function (done) {
+                e.should.equal('ok');
+                isStrOrNumDefined.should.equal(true);
                 done();
             });
         });
@@ -137,7 +166,7 @@ describe('Type', function(){
             it('throw error', function (done) {
                 e.message.should.equal(
                     'Unexpected argument, expecting ' +
-                    'StrOrNum2' +
+                    'STRORNUM' +
                     ' (arg[' + 1 + '])'
                 );
                 done();

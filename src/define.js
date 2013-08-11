@@ -2,13 +2,13 @@
  * func define/destroy to define/destroy a type
 */
 
-Type.__registered__ = {};
+Type.__defined__ = {};
 
 Type.define = function(name, check, override){
     var Type = this;
     if(!Type.isStr(name) || !Type.isFunc(check)){
         throw new TypeError('Param error');
-    }else if(!override && this.__registered__[name]){
+    }else if(!override && this.__defined__[name]){
         throw new Error('Type ' + name + ' already exists');
     }else{
         var funcCreator = function(func){
@@ -39,7 +39,7 @@ Type.define = function(name, check, override){
         funcCreator.constructor = Type;
         funcCreator.__proto__ = Type.prototype;
 
-        return this.__registered__[name] = funcCreator;
+        return this.__defined__[name] = funcCreator;
     }
 };
 
@@ -125,15 +125,19 @@ Type.any = function(name){
     return Type.define(name, checker);
 };
 
+Type.isDefined = function(name){
+    return !!this.__defined__[name];
+};
+
 Type.destroy = function(name){
     if(!Type.isStr(name)){
         throw new TypeError('Param error');
     }
 
-    var type = this.__registered__[name];
+    var type = this.__defined__[name];
     if(type){
         type = null;
-        delete this.__registered__[name];
+        delete this.__defined__[name];
     }
 };
 
