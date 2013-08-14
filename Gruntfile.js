@@ -4,12 +4,23 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         concat: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                separator: '\n\n',
+                banner: '/*! ' + 
+                    '<%= pkg.name %> ' + 
+                    'v<%= pkg.version %> ' + 
+                    '[<%= pkg.author.email %>] ' + 
+                    '[<%= grunt.template.today("dd-mm-yyyy") %>] ' + 
+                    '*/\n'
             },
             dist: {
                 src: [
                     'src/intro.js',
-                    'src/<%= pkg.name %>.js',
+
+                    'src/type.js',
+                    'src/judge.js',
+                    'src/define.js',
+                    'src/default-types.js',
+                    
                     'src/outro.js'
                 ],
                 dest: 'tmp/<%= pkg.name %>.js'
@@ -20,18 +31,23 @@ module.exports = function(grunt) {
                 files: [
                     {
                         src: ['tmp/<%= pkg.name %>.js'], 
-                        dest: 'dist/<%= pkg.name %>.js'
+                        dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.js'
                     }
                 ]
             }
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                banner: '/*! ' + 
+                    '<%= pkg.name %> ' + 
+                    'v<%= pkg.version %> ' + 
+                    '[<%= pkg.author.email %>] ' + 
+                    '[<%= grunt.template.today("dd-mm-yyyy") %>] ' + 
+                    '*/\n'
             },
             dist: {
                 files: {
-                    'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
+                    'dist/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.dist.dest %>']
                 }
             }
         },

@@ -17,4 +17,5 @@ node_modules
 dist
 
 test/test.html
+test/page
 tmp
