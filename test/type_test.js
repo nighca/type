@@ -9,6 +9,7 @@ function Person(name){
 }
 
 var Str = Type.Str;
+var Num = Type.Num;
 
 describe('Type', function(){
 
@@ -22,6 +23,22 @@ describe('Type', function(){
             it('works well', function (done) {
                 e.should.equal('ok');
                 Per.constructor.should.equal(Type);
+                done();
+            });
+        });
+    }
+
+
+    try{
+        var isPersonDefined = Type.isDefined('PERSON');
+        var isPersonsDefined = Type.isDefined('PERSONS');
+        throw 'ok';
+    }catch(e){
+        describe('judge if PERSON/PERSONS defined', function(){
+            it('works well & return true/false', function (done) {
+                e.should.equal('ok');
+                isPersonDefined.should.equal(true);
+                isPersonsDefined.should.equal(false);
                 done();
             });
         });
@@ -65,7 +82,6 @@ describe('Type', function(){
         var p = getPerson(1);
         throw 'ok';
     }catch(e){
-        console.log(p,e.message);
         describe('getPerson with "1"', function(){
             it('throw error', function (done) {
                 e.message.should.equal(
@@ -82,7 +98,6 @@ describe('Type', function(){
         var p3 = getPerson('p3');
         throw 'ok';
     }catch(e){
-        console.log(p3,e.message);
         describe('getPerson with "p3"', function(){
             it('throw error', function (done) {
                 e.message.should.equal('Unexpected result, expecting ' + Per.typeName);
@@ -91,4 +106,109 @@ describe('Type', function(){
         });
     }
 
+    try{
+        var StrOrNum = Type.any(Str, Num);
+        var StrOrNum2 = Type.any('STRORNUM', Str, Num);
+        throw 'ok';
+    }catch(e){
+        describe('any: Str or Num => StrOrNum', function(){
+            it('throw ok', function (done) {
+                e.should.equal('ok');
+                done();
+            });
+        });
+    }
+
+    try{
+        var isStrOrNumDefined = Type.isDefined('STRORNUM');
+        throw 'ok';
+    }catch(e){
+        describe('judge if STRORNUM defined', function(){
+            it('works well & return true', function (done) {
+                e.should.equal('ok');
+                isStrOrNumDefined.should.equal(true);
+                done();
+            });
+        });
+    }
+
+    var addToStr = Str(function(a, b){
+        return a + b;
+    }, StrOrNum, StrOrNum);
+
+    var addToStr2 = Str(function(a, b){
+        return a + b;
+    }, StrOrNum2, StrOrNum2);
+
+    var result;
+
+    try{
+        result = addToStr(1, true);
+        throw 'ok';
+    }catch(e){
+        describe('addToStr with 1, true', function(){
+            it('throw error', function (done) {
+                e.message.should.equal(
+                    'Unexpected argument, expecting ' +
+                    StrOrNum.typeName +
+                    ' (arg[' + 1 + '])'
+                );
+                done();
+            });
+        });
+    }
+
+    try{
+        addToStr2(1, true);
+        throw 'ok';
+    }catch(e){
+        describe('addToStr2 with 1, true', function(){
+            it('throw error', function (done) {
+                e.message.should.equal(
+                    'Unexpected argument, expecting ' +
+                    'STRORNUM' +
+                    ' (arg[' + 1 + '])'
+                );
+                done();
+            });
+        });
+    }
+
+    try{
+        result = addToStr(1, 2);
+        throw 'ok';
+    }catch(e){
+        describe('addToStr with 1, 2', function(){
+            it('throw error', function (done) {
+                e.message.should.equal('Unexpected result, expecting ' + Str.typeName);
+                done();
+            });
+        });
+    }
+
+    try{
+        result = addToStr(1, '2');
+        throw 'ok';
+    }catch(e){
+        describe('addToStr with 1, "2"', function(){
+            it('throw ok & returns "12"', function (done) {
+                e.should.equal('ok');
+                result.should.equal('12');
+                done();
+            });
+        });
+    }
+
+    try{
+        result = addToStr('1', '2');
+        throw 'ok';
+    }catch(e){
+        describe('addToStr with "1", "2"', function(){
+            it('throw ok & returns "12"', function (done) {
+                e.should.equal('ok');
+                result.should.equal('12');
+                done();
+            });
+        });
+    }
 });
